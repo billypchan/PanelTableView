@@ -27,8 +27,11 @@
 	{
 		panelsViewController = [[SamplePanelsViewControllerForiPad alloc] init];
 	}
+    
+    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"NavigationBar_bg"] forBarPosition:UIBarPositionTopAttached barMetrics:UIBarMetricsDefault];
 	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:panelsViewController];
 	[[navController navigationBar] setBarStyle:UIBarStyleBlackTranslucent];
+    navController.navigationBar.translucent = NO;
 	[self.window setRootViewController:navController];
     
     [self.window makeKeyAndVisible];

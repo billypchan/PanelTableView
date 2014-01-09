@@ -45,7 +45,7 @@
 	{
 		[self setBackgroundColor:[UIColor whiteColor]];
 		
-		_tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,0,frame.size.width,frame.size.height)];
+		self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, frame.size.width, frame.size.height)];
 		[self addSubview:_tableView];
 		[_tableView setDelegate:self];
 		[_tableView setDataSource:self];
@@ -58,7 +58,7 @@
 {
 	if (self = [super init])
 	{
-		_identifier = identifier;
+		self.identifier = identifier;
 	}
 	return self;
 }
@@ -67,10 +67,10 @@
 {
 	[super setFrame:frame];
 	
-	CGRect tableViewFrame = [self.tableView frame];
+	CGRect tableViewFrame = _tableView.frame;
 	tableViewFrame.size.width = self.frame.size.width;
 	tableViewFrame.size.height = self.frame.size.height;
-	[self.tableView setFrame:tableViewFrame];
+	[_tableView setFrame:tableViewFrame];
 }
 
 - (void)reset
@@ -80,7 +80,7 @@
 
 - (void)pageWillAppear
 {
-	[self.tableView reloadData];
+	[_tableView reloadData];
 	[self restoreTableviewOffset];
 }
 
@@ -88,13 +88,13 @@
 {
 	//NSLog(@"page did appear %i", pageNumber);
 	//[self showPanel:YES animated:YES];
-	[self.tableView setScrollsToTop:YES];
+	[_tableView setScrollsToTop:YES];
 
 }
 
 - (void)pageWillDisappear
 {
-	[self.tableView setScrollsToTop:NO];
+	[_tableView setScrollsToTop:NO];
 	[self saveTableviewOffset];
 }
 
@@ -104,7 +104,7 @@
 
 - (void)saveTableviewOffset
 {
-	CGPoint contentOffset = [self.tableView contentOffset];
+	CGPoint contentOffset = [_tableView contentOffset];
 	float y = contentOffset.y;
 	
 	NSMutableArray *offsetArray = [[[NSUserDefaults standardUserDefaults] objectForKey:kTableOffset] mutableCopy];
@@ -113,13 +113,13 @@
 		offsetArray = [NSMutableArray array];
 	}
 	
-	if ([offsetArray count]<self.pageNumber+1)
+	if ([offsetArray count] < _pageNumber + 1)
 	{
 		[offsetArray addObject:@(y)];
 	}
 	else
 	{
-		[offsetArray replaceObjectAtIndex:self.pageNumber withObject:[NSNumber numberWithInt:y]];
+		[offsetArray replaceObjectAtIndex:_pageNumber withObject:[NSNumber numberWithInt:y]];
 	}
 	
 	[[NSUserDefaults standardUserDefaults] setObject:offsetArray forKey:kTableOffset];
@@ -132,11 +132,11 @@
 	NSMutableArray *offsetArray = [[NSUserDefaults standardUserDefaults] objectForKey:kTableOffset];
 	if (offsetArray)
 	{
-		if ([offsetArray count]>self.pageNumber)
+		if ([offsetArray count] > _pageNumber)
 		{
-			float y = [[offsetArray objectAtIndex:self.pageNumber] floatValue];
-			CGPoint contentOffset = CGPointMake(0, y);
-			[self.tableView setContentOffset:contentOffset animated:NO];
+			float y = [[offsetArray objectAtIndex:_pageNumber] floatValue];
+			CGPoint contentOffset = CGPointMake(0.0f, y);
+			[_tableView setContentOffset:contentOffset animated:NO];
 		}
 	}
 }
@@ -144,12 +144,9 @@
 - (void)removeTableviewOffset
 {
 	NSMutableArray *offsetArray = [[[NSUserDefaults standardUserDefaults] objectForKey:kTableOffset] mutableCopy];
-	if (offsetArray)
-	{
-		if ([offsetArray count]>self.pageNumber)
-		{
-			
-			[offsetArray removeObjectAtIndex:self.pageNumber];
+	if (offsetArray) {
+		if ([offsetArray count] > _pageNumber) {
+			[offsetArray removeObjectAtIndex:_pageNumber];
 			[[NSUserDefaults standardUserDefaults] setObject:offsetArray forKey:kTableOffset];
 		}
 	}
@@ -159,18 +156,16 @@
 
 - (void)addPanelWithAnimation:(BOOL)animate
 {
-	if (animate)
-	{
+	if (animate) {
 		[self showPanel:YES animated:YES];
 	}
 }
 
 - (void)removePanelWithAnimation:(BOOL)animate
 {
-	if (animate)
-	{
+	if (animate) {
 		[self showPanel:NO animated:YES];
-		[self performSelector:@selector(showNextPanel) withObject:nil afterDelay:0.9];
+		[self performSelector:@selector(showNextPanel) withObject:nil afterDelay:0.9f];
 	}
 }
 
@@ -178,19 +173,16 @@
 
 - (void)shouldWiggle:(BOOL)wiggle
 {
-	if (wiggle)
-	{
+	if (wiggle) {
 		[UIView beginAnimations:nil context:nil];
-		[UIView setAnimationDuration:0.1];
+		[UIView setAnimationDuration:0.1f];
 		[UIView setAnimationRepeatAutoreverses:YES];
 		[UIView setAnimationRepeatCount:10000];
-		[self setTransform:CGAffineTransformMakeRotation(1*M_PI/180.0)];
-		[self setTransform:CGAffineTransformMakeRotation(-1*M_PI/180.0)];
+		[self setTransform:CGAffineTransformMakeRotation(1.0f * M_PI / 180.0f)];
+		[self setTransform:CGAffineTransformMakeRotation(-1.0f * M_PI / 180.0f)];
 		[UIView commitAnimations];
-	}
-	else
-	{
-		[self setTransform:CGAffineTransformMakeRotation(0)];
+	} else {
+		[self setTransform:CGAffineTransformMakeRotation(0.0f)];
 		[self.layer removeAllAnimations];
 	}
 }
@@ -199,9 +191,9 @@
 
 - (void)showNextPanel
 {
-	CGAffineTransform scaleTransform = CGAffineTransformScale([self transformForOrientation], 1, 1);
+	CGAffineTransform scaleTransform = CGAffineTransformScale([self transformForOrientation], 1.0f, 1.0f);
 	[self setTransform:scaleTransform];
-	CGAffineTransform translateTransform = CGAffineTransformTranslate([self transformForOrientation], self.frame.size.width, 0);
+	CGAffineTransform translateTransform = CGAffineTransformTranslate([self transformForOrientation], self.frame.size.width, 0.0f);
 	[self setTransform:translateTransform];
 	//[self setTransform:CGAffineTransformConcat(translateTransform, scaleTransform)];
 	
@@ -210,7 +202,7 @@
 	[UIView setAnimationDuration:0.2];
 	
 	//scaleTransform = CGAffineTransformScale([self transformForOrientation], 1, 1);
-	translateTransform = CGAffineTransformMakeTranslation(0, 0);
+	translateTransform = CGAffineTransformMakeTranslation(0.0f, 0.0f);
 	//[self setTransform:CGAffineTransformConcat(scaleTransform, translateTransform)];
 	[self setTransform:translateTransform];
 	
@@ -220,16 +212,16 @@
 
 - (void)showPreviousPanel
 {
-	CGAffineTransform scaleTransform = CGAffineTransformScale([self transformForOrientation], 1, 1);
+	CGAffineTransform scaleTransform = CGAffineTransformScale([self transformForOrientation], 1.0f, 1.0f);
 	[self setTransform:scaleTransform];
-	CGAffineTransform translateTransform = CGAffineTransformTranslate([self transformForOrientation], -1*self.frame.size.width, 0);
+	CGAffineTransform translateTransform = CGAffineTransformTranslate([self transformForOrientation], -1.0f * self.frame.size.width, 0.0f);
 	[self setTransform:translateTransform];
 	
 	[UIView beginAnimations:nil context:nil];
 	[UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
 	[UIView setAnimationDuration:0.2];
 	
-	translateTransform = CGAffineTransformMakeTranslation(0, 0);
+	translateTransform = CGAffineTransformMakeTranslation(0.0f, 0.0f);
 	[self setTransform:translateTransform];
 	
 	[UIView commitAnimations];
@@ -238,32 +230,23 @@
 
 - (void)showPanel:(BOOL)show animated:(BOOL)animated
 {
-	if (animated)
-	{
+	if (animated) {
 		[self show:show];
-	}
-	else
-	{
+	} else {
 		[self setHidden:!show];
-		if (show)
-		{
+		if (show) {
 			self.transform = CGAffineTransformScale([self transformForOrientation], 1, 1);
-		}
-		else
-		{
-			
+		} else {
+			//
 		}
 	}
 }
 
 - (void)show:(BOOL)show 
 {
-	if (show)
-	{
+	if (show) {
 		self.transform = CGAffineTransformScale([self transformForOrientation], 0.001, 0.001);
-	}
-	else
-	{
+	} else {
 		[self removeTableviewOffset];
 		self.transform = CGAffineTransformScale([self transformForOrientation], 1, 1);
 	}
@@ -271,20 +254,18 @@
 	[UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
 	[UIView setAnimationDuration:0.2];
 	[UIView setAnimationDelegate:self];
-	if (show)
-	{
+	if (show) {
 		[UIView setAnimationDidStopSelector:@selector(bounce1AnimationStopped)];
 		self.transform = CGAffineTransformScale([self transformForOrientation], 1.05, 1.05);
-	}
-	else
-	{
+	} else {
 		[UIView setAnimationDidStopSelector:@selector(bounce4AnimationStopped)];
 		self.transform = CGAffineTransformScale([self transformForOrientation], 1.05, 1.05);
 	}
 	[UIView commitAnimations];
 }
 
-- (void)bounce1AnimationStopped {
+- (void)bounce1AnimationStopped
+{
 	[UIView beginAnimations:nil context:nil];
 	[UIView setAnimationDuration:kTransitionDuration/3];
 	[UIView setAnimationDelegate:self];
@@ -293,14 +274,16 @@
 	[UIView commitAnimations];
 }
 
-- (void)bounce2AnimationStopped {
+- (void)bounce2AnimationStopped
+{
 	[UIView beginAnimations:nil context:nil];
 	[UIView setAnimationDuration:kTransitionDuration/4];
 	self.transform = [self transformForOrientation];
 	[UIView commitAnimations];
 }
 
-- (void)bounce3AnimationStopped {
+- (void)bounce3AnimationStopped
+{
 	[UIView beginAnimations:nil context:nil];
 	[UIView setAnimationDuration:kTransitionDuration/4];
 	[UIView setAnimationDelegate:self];
@@ -309,7 +292,8 @@
 	[UIView commitAnimations];
 }
 
-- (void)bounce4AnimationStopped {
+- (void)bounce4AnimationStopped
+{
 	[UIView beginAnimations:nil context:nil];
 	[UIView setAnimationDuration:kTransitionDuration/1.5];
 	[UIView setAnimationDelegate:self];
@@ -326,9 +310,9 @@
 {
 	UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
 	if (orientation == UIInterfaceOrientationLandscapeLeft) {
-		return CGAffineTransformMakeRotation(M_PI*1.5);
+		return CGAffineTransformMakeRotation(M_PI * 1.5f);
 	} else if (orientation == UIInterfaceOrientationLandscapeRight) {
-		return CGAffineTransformMakeRotation(M_PI/2);
+		return CGAffineTransformMakeRotation(M_PI / 2.0f);
 	} else if (orientation == UIInterfaceOrientationPortraitUpsideDown) {
 		return CGAffineTransformMakeRotation(-M_PI);
 	} else {
@@ -340,25 +324,21 @@
 
 - (CGFloat)tableView:(UITableView *)tableView_ heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	if ([self.delegate respondsToSelector:@selector(panelView:heightForRowAtIndexPath:)])
-	{
+	if ([self.delegate respondsToSelector:@selector(panelView:heightForRowAtIndexPath:)]) {
 		return [self.delegate panelView:self heightForRowAtIndexPath:[PanelIndexPath panelIndexPathForPage:self.pageNumber indexPath:indexPath]];
-	}
-	else return 0;
+	} else return 0;
 }
 
 - (void)tableView:(UITableView *)tableView_ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	if ([self.delegate respondsToSelector:@selector(panelView:didSelectRowAtIndexPath:)])
-	{
+	if ([self.delegate respondsToSelector:@selector(panelView:didSelectRowAtIndexPath:)]) {
 		return [self.delegate panelView:self didSelectRowAtIndexPath:[PanelIndexPath panelIndexPathForPage:self.pageNumber indexPath:indexPath]];
 	}
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView_ cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	if ([self.delegate respondsToSelector:@selector(panelView:cellForRowAtIndexPath:)])
-	{
+	if ([self.delegate respondsToSelector:@selector(panelView:cellForRowAtIndexPath:)]) {
 		return [self.delegate panelView:self cellForRowAtIndexPath:[PanelIndexPath panelIndexPathForPage:self.pageNumber indexPath:indexPath]];
 	}
 	return nil;
@@ -366,8 +346,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView_ numberOfRowsInSection:(NSInteger)section
 {
-	if ([self.delegate respondsToSelector:@selector(panelView:numberOfRowsInPage:section:)])
-	{
+	if ([self.delegate respondsToSelector:@selector(panelView:numberOfRowsInPage:section:)]) {
 		return [self.delegate panelView:self numberOfRowsInPage:self.pageNumber section:section];
 	}
 	return 0;
@@ -375,8 +354,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-	if ([self.delegate respondsToSelector:@selector(panelView:numberOfSectionsInPage:)])
-	{
+	if ([self.delegate respondsToSelector:@selector(panelView:numberOfSectionsInPage:)]) {
 		return [self.delegate panelView:self numberOfSectionsInPage:self.pageNumber];
 	}
 	return 1;
@@ -384,8 +362,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-	if ([self.delegate respondsToSelector:@selector(panelView:titleForHeaderInPage:section:)])
-	{
+	if ([self.delegate respondsToSelector:@selector(panelView:titleForHeaderInPage:section:)]) {
 		return [self.delegate panelView:self titleForHeaderInPage:self.pageNumber section:section];
 	}
 	return nil;

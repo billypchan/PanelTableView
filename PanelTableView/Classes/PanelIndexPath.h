@@ -34,8 +34,11 @@
 #import <Foundation/Foundation.h>
 
 @interface PanelIndexPath : NSObject
+
 @property (nonatomic, assign) int page, section, row;
+
 - (id)initWithRow:(int)_row section:(int)_section page:(int)_page;
 + (id)panelIndexPathForRow:(int)_row section:(int)_section page:(int)_page;
 + (id)panelIndexPathForPage:(int)_page indexPath:(NSIndexPath*)indexPath;
+
 @end

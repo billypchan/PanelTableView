@@ -38,11 +38,10 @@
 
 - (id)initWithRow:(int)row section:(int)section page:(int)page
 {
-	if (self = [super init])
-	{
-		_row = row;
-		_section = section;
-		_page = page;
+	if (self = [super init]) {
+		self.row = row;
+		self.section = section;
+		self.page = page;
 	}
 	return self;
 }

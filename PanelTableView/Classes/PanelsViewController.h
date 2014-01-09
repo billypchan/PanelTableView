@@ -41,7 +41,7 @@
 
 
 @interface PanelsViewController : UIViewController <UIScrollViewDelegate, PanelViewDelegate>
-@property (nonatomic, strong) UIScrollViewExt *scrollView;
+@property (nonatomic, strong) UIScrollViewExt *scrollViewExt;
 @property (nonatomic, strong) NSMutableSet *recycledPages, *visiblePages;
 @property (nonatomic, assign) int currentPage, lastDisplayedPage;
 @property (nonatomic, assign) BOOL isEditing;
@@ -49,7 +49,7 @@
 #define GAP 10
 #define TAG_PAGE 11000
 
-- (PanelView*)dequeueReusablePageWithIdentifier:(NSString*)identifier;
+- (PanelView *)dequeueReusablePageWithIdentifier:(NSString*)identifier;
 - (PanelView *)panelViewAtPage:(NSInteger)page;
 
 #pragma mark editing

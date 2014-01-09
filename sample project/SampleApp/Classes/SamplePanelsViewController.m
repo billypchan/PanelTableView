@@ -28,7 +28,6 @@
 			[self.panelsArray addObject:rows];
 		}
 		
-		
 		[self addTemporaryUI];
 	}
 	return self;
@@ -59,7 +58,6 @@
 	UISegmentedControl *segmentControl = [[UISegmentedControl alloc] initWithItems:@[@"+",@"-"]];
 	[segmentControl setFrame:CGRectMake(0,0,60,30)];
 	[segmentControl setMomentary:YES];
-	[segmentControl setSegmentedControlStyle:UISegmentedControlStyleBar];
 	self.addRemoveItem = [[UIBarButtonItem alloc] initWithCustomView:segmentControl];
 	[self.navigationItem setLeftBarButtonItem:self.addRemoveItem];
 	[segmentControl addTarget:self action:@selector(onSegmentControlValueChanged:) forControlEvents:UIControlEventValueChanged];
