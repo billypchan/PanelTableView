@@ -74,10 +74,10 @@
 }
 
 
-- (void)dealloc {
-    [window release];
-    [super dealloc];
-}
+//- (void)dealloc {
+//    [window release];
+//    [super dealloc];
+//}
 
 
 @end

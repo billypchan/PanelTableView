@@ -33,6 +33,7 @@
 
 #import "PanelIndexPath.h"
 
+#import <UIKit/UIKit.h>
 
 @implementation PanelIndexPath
 

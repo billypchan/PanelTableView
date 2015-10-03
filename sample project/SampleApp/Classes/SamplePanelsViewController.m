@@ -11,26 +11,38 @@
 
 @implementation SamplePanelsViewController
 
+- (void)initAction
+{
+  _panelsArray = [NSMutableArray new];
+		int numberOfPanels = 10;
+		for (int i=0; i<numberOfPanels; i++)
+    {
+      NSMutableArray *rows = [NSMutableArray array];
+      int numberOfRows = arc4random()%20;
+      for (int j=0; j<numberOfRows; j++)
+      {
+        [rows addObject:@""];
+      }
+      [self.panelsArray addObject:rows];
+    }
+		
+		[self addTemporaryUI];
+}
+
 - (id)init
 {
 	if (self = [super init])
 	{
-		_panelsArray = [NSMutableArray new];
-		int numberOfPanels = 10;
-		for (int i=0; i<numberOfPanels; i++)
-		{
-			NSMutableArray *rows = [NSMutableArray array];
-			int numberOfRows = arc4random()%20;
-			for (int j=0; j<numberOfRows; j++)
-			{
-				[rows addObject:@""];
-			}
-			[self.panelsArray addObject:rows];
-		}
-		
-		[self addTemporaryUI];
+    [self initAction];
 	}
 	return self;
+}
+
+-(void)viewDidLoad
+{
+  [super viewDidLoad];
+  
+  [self initAction];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -40,11 +52,11 @@
     // Release any cached data, images, etc. that aren't in use.
 }
 
-- (void)viewDidUnload {
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-}
+//- (void)viewDidUnload {
+//    [super viewDidUnload];
+//    // Release any retained subviews of the main view.
+//    // e.g. self.myOutlet = nil;
+//}
 
 #pragma mark temporary
 
