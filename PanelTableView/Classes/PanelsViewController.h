@@ -41,6 +41,9 @@
 
 
 @interface PanelsViewController : UIViewController <UIScrollViewDelegate, PanelViewDelegate>
+{
+  bool isViewDidLayoutSubviews;///flag to fix first time loading, view is not scrollable issue in tab view
+}
 @property (nonatomic, strong) UIScrollViewExt *scrollViewExt;
 @property (nonatomic, strong) NSMutableSet *recycledPages, *visiblePages;
 @property (nonatomic, assign) int currentPage, lastDisplayedPage;

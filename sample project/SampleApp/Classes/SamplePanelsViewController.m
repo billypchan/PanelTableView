@@ -43,6 +43,8 @@
   [super viewDidLoad];
   
   [self initAction];
+
+//  [self addPage];
 }
 
 - (void)didReceiveMemoryWarning {

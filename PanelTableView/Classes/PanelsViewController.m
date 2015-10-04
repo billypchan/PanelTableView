@@ -72,15 +72,31 @@
 	[self tilePages];
 }
 
-
-- (void)didReceiveMemoryWarning
+-(void)viewDidLayoutSubviews
 {
-    [super didReceiveMemoryWarning];
+  [super viewDidLayoutSubviews];
+
+  if(!isViewDidLayoutSubviews)
+  {
+    [self addPage];
+    isViewDidLayoutSubviews = YES;
+  }
 }
 
-- (void)viewDidUnload
+//- (void)didReceiveMemoryWarning
+//{
+//    [super didReceiveMemoryWarning];
+//}
+
+//- (void)viewDidUnload
+//{
+//    [super viewDidUnload];
+//}
+
+-(void)viewDidLoad
 {
-    [super viewDidUnload];
+  [super viewDidLoad];
+  isViewDidLayoutSubviews = NO;
 }
 
 - (void)viewDidAppear:(BOOL)animated
